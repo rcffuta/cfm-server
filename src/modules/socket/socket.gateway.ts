@@ -34,12 +34,12 @@ export class SocketGateway {
             console.log(`[ORACLE] Received: ${msg}`);
 
             chatNamespace.emit("preparing", msg);
+            const val = generateRandomNumberWithDigits(5);
 
             setTimeout(()=>{
-                const val = generateRandomNumberWithDigits(5);
                 console.debug("Sending:", val);
                 chatNamespace.emit("selection", val);
-            }, 5000)
+            }, 1500)
         });
 
         socket.on("reset", ()=>{
