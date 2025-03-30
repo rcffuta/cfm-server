@@ -1,7 +1,17 @@
+import * as dotenv from "dotenv";
+import path from "path";
+
+// Load .env from the project root
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 import express from "express";
-import { createServer } from "http";
+import { createServer } from "node:http";
 import { SocketModule } from "./modules/socket/socket.module";
+
+
+dotenv.config({
+  path: "../env"
+});
 
 const app = express();
 const server = createServer(app);
