@@ -2,14 +2,15 @@ import { Space, ReturnObject } from "nobox-client";
 import { createRowSchema } from "../../config";
 
 interface Attendee {
-    email: string;
     username: string;
-    AID: string;
+    email: string;
+    name: string;
+    raffleId?: number;
 }
 
 export const AttendeeStructure: Space<Attendee> = {
-    space: "Attendee",// + (process.env.NODE_ENV !== "production" ? "-test" : ""),
-    description: "A Record Space for Attendees",
+    space: "AttendeeV2",// + (process.env.NODE_ENV !== "production" ? "-test" : ""),
+    description: "A Record Space for Attendees CFM V2",
     structure: {
         email: {
             description: "User's Email",
@@ -21,8 +22,13 @@ export const AttendeeStructure: Space<Attendee> = {
             required: true,
             type: String,
         },
-        AID: {
-            description: "User's AID",
+        raffleId: {
+            description: "User's raffle Id",
+            required: false,
+            type: Number,
+        },
+        name: {
+            description: "User's full name",
             required: true,
             type: String,
         },

@@ -13,10 +13,3 @@ export interface UserData {
     email: string;
     name: string;
 }
-
-export interface WinnerDetails {
-  raffleId: number;
-  name: string;
-  email: string;
-  [key: string]: any; // Allow for additional properties
-}

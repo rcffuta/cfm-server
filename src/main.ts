@@ -3,7 +3,6 @@ import { WebSocketServer, WebSocket } from 'ws';
 
 import { 
   authenticateUser, 
-  getUserByEmail, 
   assignRaffleId, 
   getRaffleIdDetails 
 } from './services/auth-service';
@@ -30,21 +29,6 @@ const raffleState: RaffleState = {
 };
 
 // Generate numeric raffle IDs (efficient for large numbers)
-function* raffleIdGenerator(): Generator<number> {
-    const base = 100000 + Math.floor(Math.random() * 900000); // random 6-digit base
-    let counter = 0;
-
-    while (true) {
-        // Spread out using a mix of increments
-        const offset = Math.floor(Math.sin(counter) * 1000) + (counter * 137) % 1000;
-        const id = (base + offset) % 900000 + 100000; // Keep within 6-digit range
-        yield id;
-        counter++;
-    }
-}
-
-
-const raffleIdGen = raffleIdGenerator();
 
 const wss = new WebSocketServer({ port: 8080 });
 
@@ -63,13 +47,12 @@ wss.on('connection', function connection(ws: WebSocket) {
         
                 try {
                     // Authenticate user (you'll implement the real function)
-                    const user = await authenticateUser(email, authToken);
+                    let user = await authenticateUser(email, authToken);
           
                     if (user) {
                         // Assign raffle ID if first login
                         if (!user.raffleId) {
-                            user.raffleId = raffleIdGen.next().value as number;
-                            await assignRaffleId(user.id, user.raffleId);
+                            user = await assignRaffleId(user.id);
                         }
             
                         // Move to authenticated clients
@@ -108,7 +91,7 @@ wss.on('connection', function connection(ws: WebSocket) {
                         }));
                     }
                 } catch (error) {
-                    console.error('Auth error:', error);
+                    console.error('Auth error:', (error as Error)?.message);
                     ws.send(JSON.stringify({
                         type: 'authError',
                         message: 'Authentication error'

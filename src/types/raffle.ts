@@ -1,4 +1,4 @@
-import { WinnerDetails } from "./user";
+import { AttendeeObject } from "../vendor/nobox/structure/attendee";
 
 export interface WebSocketMessage {
   type: string;
@@ -27,6 +27,6 @@ export interface ResetDrawMessage extends WebSocketMessage {
 
 export interface RaffleState {
   isDrawing: boolean;
-  currentWinner: WinnerDetails | null;
+  currentWinner: AttendeeObject | null;
   participants: Set<number>;
 }
