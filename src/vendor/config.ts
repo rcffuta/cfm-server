@@ -1,16 +1,22 @@
 import  {  Config,  getFunctions,  getSchemaCreator  }  from  "nobox-client";
 
+const endpoint =  "https://api.nobox.cloud"
+const token =  process.env.NEXT_PUBLIC_NB_TOKEN || process.env.NB_TOKEN || "";
+
 export const config: Config = {
-    endpoint:  "https://api.nobox.cloud", // or http://localhost:8000 if you are running local
+    endpoint, // or http://localhost:8000 if you are running local
     project:  "CFM",
-    token: process.env.NB_TOKEN || ""
+    token,
 };
 
 export const liveconfig: Config = {
-    endpoint:  "https://api.nobox.cloud", // or http://localhost:8000 if you are running local
+    endpoint, // or http://localhost:8000 if you are running local
     project:  "RCFFUTA",
-    token: process.env.NB_TOKEN || ""
+    token,
 };
+
+
+// console.debug({config, liveconfig})
 
 export const createRowSchema = getSchemaCreator(config, { type: "rowed" });
 export const createLiveRowSchema = getSchemaCreator(liveconfig, { type: "rowed" });
