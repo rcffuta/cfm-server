@@ -8,7 +8,7 @@ interface Attendee {
 }
 
 export const AttendeeStructure: Space<Attendee> = {
-    space: "Attendee" + (process.env.NODE_ENV !== "production" ? "-test" : ""),
+    space: "Attendee",// + (process.env.NODE_ENV !== "production" ? "-test" : ""),
     description: "A Record Space for Attendees",
     structure: {
         email: {
