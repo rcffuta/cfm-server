@@ -1,5 +1,9 @@
 
+import dotenv from 'dotenv';
+dotenv.config();
 import { WebSocketServer, WebSocket } from 'ws';
+
+
 
 import { 
   authenticateUser, 
@@ -30,7 +34,7 @@ const raffleState: RaffleState = {
 
 // Generate numeric raffle IDs (efficient for large numbers)
 
-const wss = new WebSocketServer({ port: 8080 });
+const wss = new WebSocketServer({ host: '0.0.0.0', port: 8080 });
 
 wss.on('connection', function connection(ws: WebSocket) {
     console.log('New client connected');
@@ -121,14 +125,18 @@ wss.on('connection', function connection(ws: WebSocket) {
                 return;
             }
       
-            // Only authenticated users can send other commands
-            if (!clients.authenticated.has(ws) && message.type !== 'auth') {
+            // Only authenticated users can send regular commands (except oracle or auth)
+            const isOracle = clients.oracle === ws;
+            const isAuthMessage = message.type === 'auth' || message.type === 'identifyOracle';
+
+            if (!clients.authenticated.has(ws) && !isOracle && !isAuthMessage) {
                 ws.send(JSON.stringify({
                     type: 'error',
                     message: 'Not authenticated'
                 }));
                 return;
             }
+
       
             // Handle oracle connection
             if (message.type === 'identifyOracle') {
